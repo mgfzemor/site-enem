@@ -1,0 +1,297 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+
+
+{% endblock %}
+
+{% block title%} Aluno {%endblock%}
+
+{% block page_name %}
+  <button type="button" class="btn btn-primary" onClick="#"> Minha cidade</button>
+  <button type="button" class="btn btn-primary" onClick="#"> Meu estado</button>
+{% endblock %}
+
+{% block body %}
+<style>
+
+#menu_aluno {
+  margin-left: 0px;
+}
+
+#bt {
+
+  margin-top: -65px;
+  margin-left: 72px;
+}
+
+#bt_rank {
+  margin-top: -75px;
+  margin-left: 180px;
+}
+
+#dados {
+  padding: 5px;
+  margin: 5px;
+
+}
+#info {
+  margin-top: -25px;
+}
+#comp_entidade {
+  margin-top: -12px;
+  margin-left: 98px;
+}
+</style>
+<div class="webe">
+<div class="row" id="info">
+    <!-- Coluna de informações do Aluno-->
+    <div class="col-md-6" id="dados">
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/data.png')}}">
+      Dados: {{aluno.inscricao}}
+    </h3>
+      {% if aluno.sexo == 'M' %}
+      <img src="{{url_for('static',filename='img/aluno/M.png')}}"/>
+      {% endif %}
+      {% if aluno.sexo == 'F' %}
+      <img src="{{url_for('static',filename='img/aluno/F.png')}}"/>
+      {% endif %}
+      <b> Sexo: </b>{{aluno.sexo}}  | <b> Idade: </b>{{aluno.idade}} | <b> Raça: </b>{{aluno.etnia}}<br/>
+      <b> Ensino Medio: </b> {{aluno.cod_conclusao_EM}}<br/>
+      <b> Nacionalidade: </b>{{aluno.cod_nacionalidade}} | <b>Estado civil:</b> {{aluno.estado_civil}} <br/><br/>
+      <b>Escola: </b> {{aluno.cod_escola}}<br/>
+      <b>Tipo escola: </b> Tipo da Escola<br/>
+      <b>Cidade: </b>{{aluno.cod_municipio_resid}}<br/>
+      <b>Estado: </b>{{aluno.cod_uf_resid}}<br/>
+      <hr/>
+      <!-- RANKING -->
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/podium.png')}}">
+        Ranking por:
+      </h3>
+
+      <div class="btn-group" id="bt_rank">
+        <button id="cod_rank" name="cod_rank" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Média Geral <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li id="numerico"><a href="#" id="mt">Matemática e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="ch">Ciências humanas e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="lc">Linguagens, códigos e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="cn">Ciências da natureza e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="red">Redação</a></li>
+          <li id="categorico"><a href="#" id="med_geral">Média Geral</a></li>
+        </ul>
+        <hr/>
+
+      </div>
+
+      <table class="table table-sm table-inverse">
+        <thead>
+
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>Escola:</td>
+            <td><b id="pos_esc">nº</b> colocado de <b>m</b> candidatos*</td>
+          </tr>
+
+          <tr>
+            <td>Cidade:</td>
+            <td><b id="pos_cidade">nº</b> colocado de <b>m</b> candidatos*</td>
+
+          </tr>
+          <tr>
+
+            <td >Estado:</td>
+            <td><b id="pos_estado">nº</b> colocado de <b>m</b> candidatos*</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr/>
+<!-- END RANKING -->
+
+<!--DADOS PROVA REDACAO -->
+    <h3>
+      <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/exam.png')}}">
+      Prova Redação:
+    </h3>
+
+    <table class="table table-sm table-inverse">
+      <thead>
+
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Status da redação:<b/></td>
+          <td>{{provaredacao.status}}</td>
+        </tr>
+        <tr>
+          <td><b>Nota da competência 1:<b/></td>
+          <td>{{provaredacao.notacomp1}}</td>
+        </tr>
+        <tr>
+          <td><b>Nota da competência 2:<b/></td>
+          <td>{{provaredacao.notacomp2}}</td>
+        </tr>
+        <tr>
+          <td><b>Nota da competência 3:<b/></td>
+          <td>{{provaredacao.notacomp3}}</td>
+        </tr>
+        <tr>
+          <td><b>Nota da competência 4:<b/></td>
+          <td>{{provaredacao.notacomp4}}</td>
+        </tr>
+        <tr>
+          <td><b>Nota da competência 5:<b/></td>
+          <td>{{provaredacao.notacomp5}}</td>
+        </tr>
+        <tr>
+          <td ><b>Nota da Redação:<b/></td>
+          <td>{{provaredacao.notard}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+<!--DADOS PROVA REDACAO -->
+    </div>
+
+
+    <div style="" class="col-md-5" height="400px" width="400px" id="dados">
+
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/calculator.png')}}">
+        Comparar:
+      </h3>
+
+      <div class="btn-group" id="bt" >
+        <button id="comp_entidade" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Escola <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li id="numerico"><a href="#" id="op_escola">Escola</a></li>
+          <li id="categorico"><a href="#" id="op_cidade">Cidade</a></li>
+          <li id="categorico"><a href="#" id="op_estado">Estado</a></li>
+        </ul>
+      </div>
+
+      <table class="table">
+     <thead>
+         <tr>
+             <th>Área do Conhecimento</th>
+             <th>Aluno</th>
+              <th class="inf_escola"></th>
+              <th class="inf_escola">Escola</th>
+              <th class="inf_municipio"></th>
+              <th class="inf_municipio">Cidade</th>
+         </tr>
+     </thead>
+     <tbody>
+         <tr>
+             <td>Matemática e suas tecnologias</td>
+             <td>{{provaobjetiva.notamt}}</td>
+             <!-- ================ ESCOLA media MT ===============-->
+             <td class="inf_escola">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+             <td class="inf_escola">nota mt escola</td>
+
+             <!-- ================ MUNICIPIO media MT ===============-->
+             <td class="inf_municipio">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+            <td class="inf_municipio">nota mt cidade</td>
+
+         </tr>
+         <tr>
+             <td>Ciências humanas e suas tecnologias</td>
+             <td>{{provaobjetiva.notach}}</td>
+
+             <!-- ================ ESCOLA media CH ===============-->
+             <td class="inf_escola">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+               <td class="inf_escola"> - </td>
+             <!-- ================ MUNICIPIO media CH ===============-->
+             <td class="inf_municipio">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+
+               <td class="inf_municipio">-</td>
+         </tr>
+         <tr>
+             <td>Linguagens, códigos e suas tecnologias</td>
+             <td>{{provaobjetiva.notalc}}</td>
+             <!-- ================ ESCOLA media LC ===============-->
+             <td class="inf_escola">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+            </td>
+               <td class="inf_escola"> - </td>
+             <!-- ================ MUNICIPIO media LC ===============-->
+             <td class="inf_municipio">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+
+             <td class="inf_municipio"> - </td>
+         </tr>
+         <tr>
+             <td>Ciências da natureza e suas tecnologias</td>
+             <td>{{provaobjetiva.notacn}}</td>
+             <!-- ================ ESCOLA media CN ===============-->
+             <td class="inf_escola">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+               <td class="inf_escola"> - </td>
+             <!-- ================ MUNICIPIO media CN ===============-->
+             <td class="inf_municipio">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+               <td class="inf_municipio">-</td>
+         </tr>
+         <tr>
+             <td>Redação</td>
+             <td> {{provaredacao.notard}} </td>
+             <!-- ================ ESCOLA media REDACAO ===============-->
+             <td class="inf_escola">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+
+               <td class="inf_escola"> - </td>
+             <!-- ================ MUNICIPIO media RADACAO ===============-->
+             <td class="inf_municipio">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+               <td class="inf_municipio">-</td>
+         </tr>
+
+         <tr>
+             <td>Média Geral</td>
+             <td>{{provaobjetiva.notamedia}}</td>
+             <!-- ================ ESCOLA media GERAL ===============-->
+             <td class="inf_escola">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+             <td class="inf_escola"> - </td>
+             <!-- ================ MUNICIPIO media GERAL ===============-->
+             <td class="inf_municipio">
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+             </td>
+
+               <td class="inf_municipio"> - </td>
+         </tr>
+
+     </tbody>
+    </table>
+    <hr/>
+    <h3>
+      <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/exam.png')}}">
+      Prova Objetiva:
+    </h3>
+    </div>
+
+
+  </div>
+</div>
+{% endblock %}

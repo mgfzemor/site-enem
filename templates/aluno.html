@@ -1,0 +1,494 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+<script src={{url_for('static',filename='chart/Chart.js')}}></script>
+{% endblock %}
+
+{% block title%} Aluno {%endblock%}
+
+{% block page_name %}
+<div class="btn-group" id="menu_aluno">
+  {%if escola%}
+  <button type="button" class="btn btn-primary" onClick="window.location.replace('/escola/{{escola.codigo}}');">Minha escola</button>
+  {%endif%}
+  <button type="button" class="btn btn-primary" onClick="window.location.replace('/cidade/{{aluno.cod_municipio}}');"> Minha cidade</button>
+  <button type="button" class="btn btn-primary" onClick="window.location.replace('/uf/{{aluno.cod_uf}}');"> Meu estado</button>
+</div>
+
+{% endblock %}
+
+{% block body %}
+
+{% if found == 1%}
+<style>
+
+#menu_aluno {
+  margin-left: 0px;
+}
+
+#bt {
+
+  margin-top: -65px;
+  margin-left: 72px;
+}
+
+#bt_rank {
+  margin-top: -75px;
+  margin-left: 180px;
+}
+
+#dados {
+  padding: 5px;
+  margin: 5px;
+
+}
+#info {
+  margin-top: -25px;
+}
+#comp_entidade {
+  margin-top: -12px;
+  margin-left: 98px;
+}
+</style>
+
+{%if escola%}
+<style>
+.inf_municipio {
+  display: none;
+}
+</style>
+{% endif %}
+
+
+<div class="webe">
+<div class="row" id="info">
+    <!-- Coluna de informações do Aluno-->
+    <div class="col-md-6" id="dados">
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/data.png')}}">
+      Dados: {{aluno.inscricao}}
+    </h3>
+      {% if aluno.sexo == 'M' %}
+      <img src="{{url_for('static',filename='img/aluno/M.png')}}"/>
+      {% endif %}
+      {% if aluno.sexo == 'F' %}
+      <img src="{{url_for('static',filename='img/aluno/F.png')}}"/>
+      {% endif %}
+      <b> Sexo: </b>{{aluno.sexo}}  | <b> Idade: </b>{{aluno.idade}} | <b> Raça: </b>{{aluno.raca}}<br/>
+      <br/>
+      <b>Escola: </b>{{escola.nome}} - {{escola.codigo}}<br/>
+      <b>Tipo escola: </b>{{escola.tipo_escola}}<br/>
+      <b>Cidade: </b>{{aluno.municipio}} -<a href="cidade/{{aluno.cod_municipio}}"> {{aluno.cod_municipio}}</a><br/>
+      <b>Estado: </b>{{aluno.uf}}<br/>
+
+      <hr/>
+      <!-- RANKING -->
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/podium.png')}}">
+        Ranking por:
+      </h3>
+
+      <div class="btn-group" id="bt_rank">
+        <button id="cod_rank" name="cod_rank" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Média Geral <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li id="numerico"><a href="#" id="mt">Matemática e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="ch">Ciências humanas e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="lc">Linguagens, códigos e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="cn">Ciências da natureza e suas tecnologias</a></li>
+          <li id="categorico"><a href="#" id="red">Redação</a></li>
+          <li id="categorico"><a href="#" id="med_geral">Média Geral</a></li>
+        </ul>
+      </div>
+
+
+<table class="table table-sm table-inverse">
+  <thead>
+
+  </thead>
+  <tbody>
+    {%if rank_escola[5]%}
+    <tr>
+      <td>Escola:</td>
+      <td><b id="pos_esc">{{rank_escola[5]}}º</b> colocado de <b>{{escola.total_alunos}}</b> candidatos*</td>
+    </tr>
+    {%endif%}
+    <tr>
+      <td>Cidade:</td>
+      <td><b id="pos_cidade">{{rank_cidade[0]}}º</b> colocado de <b>{{municipio.total_alunos}}</b> candidatos*</td>
+
+    </tr>
+    <tr>
+
+      <td >Estado:</td>
+      <td><b id="pos_estado">00º</b> colocado de <b>10000</b> candidatos*</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- END RANKING -->
+    </div>
+
+    <div style="" class="col-md-5" height="400px" width="400px" id="dados">
+
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/calculator.png')}}">
+        Comparar:
+      </h3>
+
+      <div class="btn-group" id="bt" >
+        <button id="comp_entidade" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Escola <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li id="numerico"><a href="#" id="op_escola">Escola</a></li>
+          <li id="categorico"><a href="#" id="op_cidade">Cidade</a></li>
+          <li id="categorico"><a href="#" id="op_estado">Estado</a></li>
+        </ul>
+      </div>
+
+      <table class="table">
+     <thead>
+         <tr>
+             <th>Área do Conhecimento</th>
+             <th>Aluno</th>
+            {%if escola%}
+              <th class="inf_escola"></th>
+              <th class="inf_escola">Escola</th>
+            {%endif%}
+            {%if municipio%}
+              <th class="inf_municipio"></th>
+              <th class="inf_municipio">Cidade</th>
+            {%endif%}
+         </tr>
+     </thead>
+     <tbody>
+         <tr>
+             <td>Matemática e suas tecnologias</td>
+             <td>{{aluno.nota_mt}}</td>
+             <!-- ================ ESCOLA media MT ===============-->
+             <td class="inf_escola">
+            {%if escola%}
+               {%if aluno.nota_mt > escola.media_mt%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_mt < escola.media_mt%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+
+               <td class="inf_escola">{{escola.media_mt}}</td>
+             {%endif%}
+             <!-- ================ MUNICIPIO media MT ===============-->
+             <td class="inf_municipio">
+            {%if municipio%}
+               {%if aluno.nota_mt > municipio.media_mt%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_mt < municipio.media_mt%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+
+               <td class="inf_municipio">{{municipio.media_mt}}</td>
+             {%endif%}
+
+         </tr>
+         <tr>
+             <td>Ciências humanas e suas tecnologias</td>
+             <td>{{aluno.nota_ch}}</td>
+
+             <!-- ================ ESCOLA media CH ===============-->
+             <td class="inf_escola">
+            {%if escola%}
+               {%if aluno.nota_ch > escola.media_ch%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_ch < escola.media_ch%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+            {%endif%}
+             </td>
+
+               <td class="inf_escola">{{escola.media_ch}}</td>
+             {%endif%}
+             <!-- ================ MUNICIPIO media CH ===============-->
+             <td class="inf_municipio">
+            {%if municipio%}
+               {%if aluno.nota_ch > municipio.media_ch%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_ch < municipio.media_ch%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+
+               <td class="inf_municipio">{{municipio.media_ch}}</td>
+             {%endif%}
+
+         </tr>
+         <tr>
+             <td>Linguagens, códigos e suas tecnologias</td>
+             <td>{{aluno.nota_lc}}</td>
+             <!-- ================ ESCOLA media LC ===============-->
+             <td class="inf_escola">
+            {%if escola%}
+               {%if aluno.nota_lc > escola.media_lc%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_lc < escola.media_lc%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+            {%endif%}
+            </td>
+
+               <td class="inf_escola">{{escola.media_lc}}</td>
+             {%endif%}
+             <!-- ================ MUNICIPIO media LC ===============-->
+             <td class="inf_municipio">
+            {%if municipio%}
+               {%if aluno.nota_lc > municipio.media_lc%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_lc < municipio.media_lc%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+
+               <td class="inf_municipio">{{municipio.media_lc}}</td>
+             {%endif%}
+         </tr>
+         <tr>
+             <td>Ciências da natureza e suas tecnologias</td>
+             <td>{{aluno.nota_cn}}</td>
+             <!-- ================ ESCOLA media CN ===============-->
+             <td class="inf_escola">
+            {%if escola%}
+               {%if aluno.nota_cn > escola.media_cn%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_cn < escola.media_cn%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+            {%endif%}
+             </td>
+
+               <td class="inf_escola">{{escola.media_cn}}</td>
+             {%endif%}
+             <!-- ================ MUNICIPIO media CN ===============-->
+             <td class="inf_municipio">
+            {%if municipio%}
+               {%if aluno.nota_cn > municipio.media_cn%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_cn < municipio.media_cn%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+
+               <td class="inf_municipio">{{municipio.media_cn}}</td>
+             {%endif%}
+         </tr>
+         <tr>
+             <td>Redação</td>
+             <td>{{aluno.nota_redacao}}</td>
+             <!-- ================ ESCOLA media REDACAO ===============-->
+             <td class="inf_escola">
+            {%if escola%}
+               {%if aluno.nota_redacao > escola.media_redacao%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_redacao < escola.media_redacao%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+            {%endif%}
+
+             </td>
+
+               <td class="inf_escola">{{escola.media_redacao}}</td>
+             {%endif%}
+             <!-- ================ MUNICIPIO media RADACAO ===============-->
+             <td class="inf_municipio">
+            {%if municipio%}
+               {%if aluno.nota_redacao > municipio.media_redacao%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.nota_redacao < municipio.media_redacao%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+
+               <td class="inf_municipio">{{municipio.media_redacao}}</td>
+             {%endif%}
+         </tr>
+
+         <tr>
+             <td>Média Geral</td>
+             <td>{{ aluno.media }}</td>
+             <!-- ================ ESCOLA media GERAL ===============-->
+             <td class="inf_escola">
+            {%if escola%}
+               {%if  aluno.media > escola.media_geral%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if  aluno.media  < escola.media_geral%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+                <td class="inf_escola">{{escola.media_geral | round(1)}}</td>
+            {%endif%}
+             </td>
+
+             <!-- ================ MUNICIPIO media GERAL ===============-->
+             <td class="inf_municipio">
+            {%if municipio%}
+               {%if aluno.media > municipio.media_geral%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%endif%}
+                {%if aluno.media < municipio.media_geral%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+
+               <td class="inf_municipio">{{municipio.media_geral}}</td>
+             {%endif%}
+         </tr>
+
+     </tbody>
+  </table>
+    </div>
+
+    <!-- /.col-md-4 -->
+</div>
+{%if graph_notas%}
+<hr/>
+<br/>
+
+<div class="row" id="info">
+
+    <!-- Grafico de distribuicao de notas dos alunos de uma escola -->
+    <div class="col-md-6">
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/bar-chart.png')}}">
+        Distribuição de notas
+      </h3>
+      <canvas id="myChart" width="400" height="400"></canvas>
+      <script>
+
+      var ctx = document.getElementById("myChart");
+          var data = {
+              labels: {{graph_notas[1]}},
+              datasets: [
+                  {
+                      label: "Distribuição de Notas da Escola",
+                      backgroundColor: [
+                          {%for i in graph_notas[1]%}
+                          {%if graph_notas[0] == graph_notas[1].index(i)%}
+                          'rgba(54, 162, 235, 1)',
+                          {%endif%}
+                          'rgba(54, 162, 235, 0.5)',
+
+                          {%endfor%}
+                      ],
+                      borderColor: [
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                      ],
+                      borderWidth: 1,
+                      data: {{graph_notas[2]}},
+                  }
+              ]
+          };
+          var myBarChart = new Chart(ctx, {
+              type: 'bar',
+              data: data,
+              options: {
+           responsive: true
+       }
+          });
+
+
+      </script>
+    </div>
+
+
+    <div class="col-md-6">
+      <p>* São considerados candidatos válidos apenas aqueles que possuem presença em ambos os dias de prova.</p>
+
+    </div>
+</div>
+{%endif%}
+</div>
+<script>
+
+var span = '<span class="caret"></span>'
+$("#cn").click(function(e){
+  e.preventDefault();
+  $("#pos_esc").text('{{rank_escola[0]}}'+'º');
+  $("#pos_cidade").text('{{rank_cidade[0]}}'+'º');
+  $("#cod_rank").html('Ciências da natureza '+span);
+});
+$("#ch").click(function(e){
+  e.preventDefault();
+  $("#pos_esc").text('{{rank_escola[1]}}'+'º');
+  $("#pos_cidade").text('{{rank_cidade[0]}}'+'º');
+  $("#cod_rank").html('Ciências humanas '+span);
+});
+$("#lc").click(function(e){
+  e.preventDefault();
+  $("#pos_esc").text('{{rank_escola[2]}}'+'º');
+  $("#pos_cidade").text('{{rank_cidade[0]}}'+'º');
+  $("#cod_rank").html('Linguagens e códigos '+span);
+});
+$("#mt").click(function(e){
+  e.preventDefault();
+  $("#pos_esc").text('{{rank_escola[3]}}'+'º');
+  $("#pos_cidade").text('{{rank_cidade[0]}}'+'º');
+  $("#cod_rank").html('Matemática '+span);
+});
+$("#red").click(function(e){
+  e.preventDefault();
+  $("#pos_esc").text('{{rank_escola[4]}}'+'º');
+  $("#pos_cidade").text('{{rank_cidade[0]}}'+'º');
+  $("#cod_rank").html('Redação '+span);
+});
+$("#med_geral").click(function(e){
+  e.preventDefault();
+  $("#pos_esc").text('{{rank_escola[5]}}'+'º');
+  $("#pos_cidade").text('{{rank_cidade[0]}}'+'º');
+  $("#cod_rank").html('Média Geral '+span);
+});
+
+
+$("#op_escola").click(function(e){
+  e.preventDefault();
+  $(".inf_municipio").hide()
+  $(".inf_escola").show()
+  $("#comp_entidade").html('Escola '+span);
+
+});
+$("#op_cidade").click(function(e){
+  e.preventDefault();
+  $(".inf_escola").hide()
+  $(".inf_municipio").show()
+  $("#comp_entidade").html('Cidade '+span);
+
+});
+</script>
+
+<!--
+<p>{{aluno}}</p>
+{%endif%}
+
+{%if escola%}
+<p>{{escola}}</p>
+{%endif%}
+-->
+{% if found == 0%}
+<p>Aluno não encontrado...</p>
+{%endif%}
+
+
+
+{% endblock %}

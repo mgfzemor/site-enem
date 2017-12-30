@@ -1,0 +1,319 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+
+<style>
+#bt {
+
+  margin-top: -80px;
+  margin-left: 170px;
+}
+</style>
+{% endblock %}
+
+{% block title%} Cidade {%endblock%}
+
+{% block page_name %}
+  Resultado por Cidade - {{municipio.cod_municipio}}
+  - <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2F127.0.0.1%3A5000%2Fcidade%2F1100205&layout=button_count&size=small&mobile_iframe=true&width=69&height=20&appId" width="69" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+{% endblock %}
+
+{% block body %}
+  <div class="webe">
+    <div class="row" id="bloco_geral">
+      <div class="col-md-6" id="dados">
+        <h3><span id="rank_icon" class="glyphicon glyphicon-info-sign btn-lg"></span>Dados: {{municipio.municipio}}</h3>
+        <b>Código municipio:</b> {{municipio.cod_municipio}}<br/>
+        <b>Total de alunos:</b> {{municipio.total_alunos}}<br/>
+        <b>Total de escolas:</b> {{municipio.total_escolas}}<br/>
+        {{municipio.media_cn}}<br/>
+        {{municipio.media_ch}}<br/>
+        {{municipio.media_lc}}<br/>
+        {{municipio.media_mt}}<br/>
+        {{municipio.media_redacao}}<br/>
+        {{municipio.media_geral}}<br/>
+      </div>
+
+      <div style="" class="col-md-5" height="400px" width="400px" id="dados">
+
+        <h3><span id="rank_icon" class="glyphicon glyphicon-stats btn-lg"></span>Comparar:</h3>
+
+        <div class="btn-group" id="bt" >
+          <button id="comp_entidade" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Escola <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li id="numerico"><a href="#" id="op_escola">Estado</a></li>
+            <li id="categorico"><a href="#" id="op_cidade">Nacional</a></li>
+            <li id="categorico"><a href="#" id="op_estado">Estado</a></li>
+          </ul>
+        </div>
+
+        <table class="table">
+       <thead>
+           <tr>
+               <th>Área do Conhecimento</th>
+               <th>Aluno</th>
+              {%if estado%}
+                <th class="inf_estado"></th>
+                <th class="inf_estado">estado</th>
+              {%endif%}
+              {%if municipio%}
+                <th class="inf_municipio"></th>
+                <th class="inf_municipio">Cidade</th>
+              {%endif%}
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>Matemática e suas tecnologias</td>
+               <td>{{municipio.media_mt}}</td>
+               <!-- ================ estado media MT ===============-->
+               <td class="inf_estado">
+              {%if estado%}
+                 {%if municipio.media_mt > estado.media_mt%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_mt < estado.media_mt%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+               </td>
+
+                 <td class="inf_estado">{{estado.media_mt}}</td>
+               {%endif%}
+               <!-- ================ MUNICIPIO media MT ===============-->
+               <td class="inf_municipio">
+              {%if nacional%}
+                 {%if municipio.media_mt > nacional.media_mt%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_mt < nacional.media_mt%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+               </td>
+
+                 <td class="inf_municipio">{{nacional.media_mt}}</td>
+               {%endif%}
+
+           </tr>
+           <tr>
+               <td>Ciências humanas e suas tecnologias</td>
+               <td>{{municipio.media_ch}}</td>
+               <!-- ================ estado media CH ===============-->
+               <td class="inf_estado">
+              {%if estado%}
+                 {%if municipio.media_ch > estado.media_ch%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_ch < estado.media_ch%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+              {%endif%}
+               </td>
+
+                 <td class="inf_estado">{{estado.media_ch}}</td>
+               {%endif%}
+               <!-- ================ MUNICIPIO media CH ===============-->
+               <td class="inf_municipio">
+              {%if nacional%}
+                 {%if municipio.media_ch > nacional.media_ch%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_ch < nacional.media_ch%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+               </td>
+
+                 <td class="inf_municipio">{{nacional.media_ch}}</td>
+               {%endif%}
+
+           </tr>
+           <tr>
+               <td>Linguagens, códigos e suas tecnologias</td>
+               <td>{{municipio.media_lc}}</td>
+               <!-- ================ estado media LC ===============-->
+               <td class="inf_estado">
+              {%if estado%}
+                 {%if municipio.media_lc > estado.media_lc%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_lc < estado.media_lc%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+              {%endif%}
+              </td>
+
+                 <td class="inf_estado">{{estado.media_lc}}</td>
+               {%endif%}
+               <!-- ================ MUNICIPIO media LC ===============-->
+               <td class="inf_municipio">
+              {%if nacional%}
+                 {%if municipio.media_lc > nacional.media_lc%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_lc < nacional.media_lc%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+               </td>
+
+                 <td class="inf_municipio">{{nacional.media_lc}}</td>
+               {%endif%}
+           </tr>
+           <tr>
+               <td>Ciências da natureza e suas tecnologias</td>
+               <td>{{municipio.media_cn}}</td>
+               <!-- ================ estado media CN ===============-->
+               <td class="inf_estado">
+              {%if estado%}
+                 {%if municipio.media_cn > estado.media_cn%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_cn < estado.media_cn%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+              {%endif%}
+               </td>
+
+                 <td class="inf_estado">{{estado.media_cn}}</td>
+               {%endif%}
+               <!-- ================ MUNICIPIO media CN ===============-->
+               <td class="inf_municipio">
+              {%if nacional%}
+                 {%if municipio.media_cn > nacional.media_cn%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_cn < nacional.media_cn%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+               </td>
+
+                 <td class="inf_municipio">{{nacional.media_cn}}</td>
+               {%endif%}
+           </tr>
+           <tr>
+               <td>Redação</td>
+               <td>{{municipio.media_redacao}}</td>
+               <!-- ================ estado media REDACAO ===============-->
+               <td class="inf_estado">
+              {%if estado%}
+                 {%if municipio.media_redacao > estado.media_redacao%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_redacao < estado.media_redacao%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+              {%endif%}
+
+               </td>
+
+                 <td class="inf_estado">{{estado.media_redacao}}</td>
+               {%endif%}
+               <!-- ================ MUNICIPIO media RADACAO ===============-->
+               <td class="inf_municipio">
+              {%if nacional%}
+                 {%if municipio.media_redacao > nacional.media_redacao%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media_redacao < nacional.media_redacao%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+               </td>
+
+                 <td class="inf_municipio">{{nacional.media_redacao}}</td>
+               {%endif%}
+           </tr>
+
+           <tr>
+               <td>Média Geral</td>
+               <td>{{ municipio.media_geral }}</td>
+               <!-- ================ estado media GERAL ===============-->
+               <td class="inf_estado">
+              {%if estado%}
+                 {%if  municipio.media > estado.media_geral%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if  municipio.media  < estado.media_geral%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+                  <td class="inf_estado">{{estado.media_geral | round(1)}}</td>
+              {%endif%}
+               </td>
+
+               <!-- ================ MUNICIPIO media GERAL ===============-->
+               <td class="inf_municipio">
+              {%if nacional%}
+                 {%if municipio.media > nacional.media_geral%}
+                  <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                  {%endif%}
+                  {%if municipio.media < nacional.media_geral%}
+                  <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                  {%endif%}
+               </td>
+
+                 <td class="inf_municipio">{{nacional.media_geral}}</td>
+               {%endif%}
+           </tr>
+
+       </tbody>
+      </table>
+      </div>
+
+    </div>
+    <hr/>
+
+    <div class="row" id="bloco_medias">
+      <div class="col-md-6" id="lista_escolas">
+        <h3><span id="rank_icon" class="glyphicon glyphicon-book btn-lg"></span> Top 10 escolas <button type="button" class="btn btn-primary btn-sm desktop-show">Ver todas escolas</button></h3>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Ranking</th>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Redação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for escola in lista_escolas%}
+                {%if loop.index <= 10%}
+                <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{escola.nome}}</td>
+                  <td>{{escola.tipo_escola}}</td>
+                  <td>{{escola.media_redacao}}</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-primary btn-lg btn-block mobile-show">Ver todas escolas</button>
+      </div>
+
+      <div class="col-md-6" id="lista_alunos">
+        <h3><span id="rank_icon" class="glyphicon glyphicon-education btn-lg"></span>Top 10 Alunos <button type="button" class="btn btn-primary btn-sm desktop-show">Ver todos Alunos</button> </h3>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Ranking</th>
+              <th>Código</th>
+              <th>Escola</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for aluno in lista_alunos%}
+                {%if loop.index <= 10%}
+                <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{aluno}}</td>
+                  <td>----</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-primary btn-lg btn-block mobile-show">Ver todos alunos</button>
+      </div>
+    </div>
+
+
+  </div>
+
+{% endblock %}

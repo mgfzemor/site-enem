@@ -1,0 +1,344 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+<script src={{url_for('static',filename='chart/Chart.js')}}></script>
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<style>
+#bt {
+
+  margin-top: -80px;
+  margin-left: 170px;
+}
+
+#bloco_ranking {
+  display: none;
+}
+#title_back {
+  display:none;
+}
+
+#sort {
+  display: inline-block;
+}
+
+.title-bt {
+  display: inline-block;
+}
+
+</style>
+
+{% endblock %}
+
+{% block title%} Resultado escola {%endblock%}
+{% block page_name %}
+Escola
+<h3 id="title_back">
+  <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/team.png')}}">
+Total de alunos: {{escola.total_alunos}} <button id="bt_back" type="button" class="btn btn-primary btn-sm desktop-show">Mostrar menos</button> </h3>
+{% endblock %}
+{% block body %}
+<div class="webe">
+  <div class="row" id="bloco_geral">
+    <div class="col-md-6" id="dados">
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/data.png')}}">
+        Dados: {{escola.municipio}}
+      </h3>
+      <b>Nome:</b> {{escola.nome}}<br/>
+      <b>Código escola:</b> {{escola.codigo}}<br/>
+      <b>Total de Alunos:</b> {{escola.total_alunos}}<br/>
+      <b>Tipo de Escola:</b> {{escola.tipo_escola}}<br/>
+      <b>Cidade:</b> {{municipio.municipio}}<br/>
+      <b>Estado:</b> {{alunos[0].uf}}<br/>
+
+    </div>
+
+    <div style="" class="col-md-6" id="dados">
+
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/calculator.png')}}">
+        Comparar:
+      </h3>
+
+      <div class="btn-group" id="bt" >
+        <button id="comp_entidade" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Cidade <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li ><a href="#" id="op_cidade">Cidade</a></li>
+          <li ><a href="#" id="op_estado">Estado</a></li>
+          <li ><a href="#" id="op_nacional">Nacional</a></li>
+        </ul>
+      </div>
+
+    <table class="table">
+   <thead>
+       <tr>
+           <th>Área do Conhecimento</th>
+           <th>Escola</th>
+           <th></th>
+           <th>Cidade</th>
+       </tr>
+   </thead>
+   <tbody>
+        <tr>
+            <td>Ciências da natureza e suas tecnologias</td>
+            <td>{{escola.media_cn}}</td>
+            <td>
+              {%if escola.media_cn > municipio.media_cn%}
+               <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+               {%else%}
+               <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+               {%endif%}
+            </td>
+            <td>{{municipio.media_cn}}</td>
+        </tr>
+        <tr>
+            <td>Ciências humanas e suas tecnologias</td>
+            <td>{{escola.media_ch}}</td>
+            <td>
+              {%if escola.media_ch > municipio.media_ch%}
+               <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+               {%else%}
+               <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+               {%endif%}
+            </td>
+            <td>{{municipio.media_ch}}</td>
+        </tr>
+        <tr>
+            <td>Linguagens, códigos e suas tecnologias</td>
+            <td>{{escola.media_lc}}</td>
+            <td>
+              {%if escola.media_lc > municipio.media_lc%}
+               <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+               {%else%}
+               <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+               {%endif%}
+            </td>
+            <td>{{municipio.media_lc}}</td>
+        </tr>
+        <tr>
+            <td>Matemática e suas tecnologias</td>
+            <td>{{escola.media_mt}}</td>
+            <td>
+              {%if escola.media_mt > municipio.media_mt%}
+               <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+               {%else%}
+               <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+               {%endif%}
+            </td>
+            <td>{{municipio.media_mt}}</td>
+         </tr>
+         <tr>
+             <td>Redação</td>
+             <td>{{escola.media_redacao}}</td>
+             <td>
+               {%if escola.media_redacao > municipio.media_redacao%}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {%else%}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+             <td>{{municipio.media_redacao}}</td>
+          </tr>
+        <tr>
+            <td>Média Geral</td>
+            <td>{{escola.media_geral }}</td>
+            <td>
+              {%if escola.media_geral > municipio.media_geral%}
+               <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+               {%else%}
+               <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+               {%endif%}
+            </td>
+            <td>{{municipio.media_geral}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+         </div>
+  </div>
+
+  <div class="row" id="bloco_medias">
+      <div class="col-md-6">
+        <h3>
+          <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/line-chart.png')}}">
+          Distribuição de notas
+        </h3>
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+
+        var ctx = document.getElementById("myChart");
+            var data = {
+                labels: {{graph[1]}},
+                datasets: [
+                    {
+                        label: "",
+                        backgroundColor: [
+                            {%for i in graph[1]%}
+                            {%if graph[0] == graph[1].index(i)%}
+                            'rgba(54, 162, 235, 1)',
+                            {%endif%}
+                            'rgba(54, 162, 235, 0.5)',
+
+                            {%endfor%}
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1,
+                        data: {{graph[2]}},
+                    }
+                ]
+            };
+            var myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+             responsive: true
+         }
+            });
+
+
+        </script>
+      </div>
+
+
+
+    <div class="col-md-6" id="lista_alunos">
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/podium.png')}}">
+        Top 10 Alunos <button id="bt_rank" type="button" class="btn btn-primary btn-sm desktop-show">Ver todos Alunos</button> </h3>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Ranking</th>
+            <th>Código</th>
+            <th>Média</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for aluno in alunos%}
+              {%if loop.index <= 10%}
+              <tr>
+                <td>{{loop.index}}</td>
+                <td>{{aluno.inscricao}}</td>
+                <td>{{aluno.media}}</td>
+              </tr>
+              {%endif%}
+          {%endfor%}
+        </tbody>
+      </table>
+      <button type="button" class="btn btn-primary btn-lg btn-block mobile-show">Ver todos alunos</button>
+    </div>
+
+
+  </div>
+  <div class="row" id="bloco_ranking" >
+  <div class="col-md-8">
+    <h3 id="rank_title">
+      <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/team.png')}}">
+      Total Alunos <button id="bt_rank" type="button" class="btn btn-primary btn-sm desktop-show">Ver todos Alunos</button> </h3>
+      <h4 class="title-bt">Ordenar por:</h4>
+      <div class="btn-group" id="sort">
+        <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Média <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li ><a href="#" id="op_cn">Nota CN</a></li>
+          <li ><a href="#" id="op_ch">Nota CH</a></li>
+          <li ><a href="#" id="op_lc">Nota LC</a></li>
+          <li ><a href="#" id="op_mt">Nota MT</a></li>
+          <li ><a href="#" id="op_red">Nota Red</a></li>
+        </ul>
+      </div>
+      <h4 class="title-bt"> Ordem:</h4>
+      <div class="btn-group">
+        <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Decrescente <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li ><a href="#" id="op_cidade">Crescente</a></li>
+        </ul>
+      </div>
+      <input id="dt" type="text"></input>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Pos</th>
+          <th>Código</th>
+          <th>Média</th>
+          <th>Nota CN</th>
+          <th>Nota CH</th>
+          <th>Nota LC</th>
+          <th>Nota MT</th>
+          <th>Nota Red</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for aluno in alunos%}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{aluno.inscricao}}</td>
+              <td>{{aluno.media}}</td>
+              <td>{{aluno.nota_cn}}</td>
+              <td>{{aluno.nota_ch}}</td>
+              <td>{{aluno.nota_lc}}</td>
+              <td>{{aluno.nota_mt}}</td>
+              <td>{{aluno.nota_redacao}}</td>
+            </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+
+    <button type="button" class="btn btn-primary btn-lg btn-block mobile-show">Ver todos alunos</button>
+  </div>
+  <div class="col-md-2">
+  </div>
+</div>
+
+</div>
+
+<script>
+$("#bt_rank").click(function(){
+  $("#bloco_geral").hide();
+  $("#bloco_medias").hide();
+  $("#bloco_ranking").show();
+  $("#title_back").show();
+  $("#rank_title").hide();
+});
+
+$("#bt_back").click(function(){
+  $("#bloco_geral").show();
+  $("#bloco_medias").show();
+  $("#bloco_ranking").hide();
+  $("#title_back").hide();
+  $("#rank_title").show();
+});
+
+$("#op_mt").click(function(){
+
+  $.getJSON($SCRIPT_ROOT + '/sort_alunos', {
+    a: {{escola.codigo}},
+  }, function(data) {
+
+    if (data){
+      alert("retornou...");
+    }
+
+  });
+
+});
+</script>
+
+{% endblock %}

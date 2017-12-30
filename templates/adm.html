@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+
+
+{% endblock %}
+
+{% block title%} AppQuarks - Admin {%endblock%}
+{% block page_name %} Admin {% endblock %}
+{% block body %}
+<p>adm: Mario Figueiró</p>
+<form method=post role="form" enctype=multipart/form-data>
+  <div class="form-group row ">
+  <div class="form-group col-xs-4">
+    <label for="importCsvFile">Import CSV file:</label>
+    <input type="file" name="csvfile" class="form-control-file" id="importCsvFile">
+  </div>
+  <div class="form-group col-xs-3">
+    <label for="separatorCsvFile">CSV saparator:</label>
+    <input type="text" name="csvseparator" class="form-control" id="separatorCsvFile">
+  </div>
+  <div class="form-group col-xs-2">
+    <br/>
+    <button type="submit" class="btn btn-primary active" id="submit-bt" style="margin-top:5px">Submit</button>
+  </div>
+  </div>
+</form>
+
+{%if header%}
+  <div class="form-group row">
+    <div class="form-group col-xs-3">
+      <label for="sel1">Select list:</label>
+      <select class="form-control" id="colunas">
+        {% for coluna in header %}
+       <option value="{{coluna}}">{{coluna}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-xs-2">
+      <br/>
+      <button type="submit" class="btn btn-primary active" id="submitbt" style="margin-top:5px">Add</button>
+    </div>
+  </div>
+{% else%}
+
+{% endif %}
+<br/>
+
+<table class="table">
+  <thead>
+     <tr>
+         <th>Coluna CSV</th>
+         <th>Nome do atributo</th>
+         <th class="inf_escola">Tipo de dado</th>
+     </tr>
+  </thead>
+  <tbody id="colunassql">
+
+  </tbody>
+</table>
+
+<script>
+
+$("#submitbt").click(function(e){
+
+  colunaCsv = "<tr><td>"+ $("#colunas").val() + "</td>";
+  nomeAtributo = "<td><input type='text' name='nomeatributo' class='form-control'></td>";
+  tipoDado = "<td><select class='form-control'><option value='INT'>INTEGER</option><option value='SMALLINT'>SMALLINT</option><option value='CHAR'>CHAR</option><option value='VARCHAR'>VARCHAR</option></select></td></tr>";
+  string = colunaCsv + nomeAtributo + tipoDado;
+  console.log(string);
+  $("#colunassql").append(string);
+});
+</script>
+{% endblock %}

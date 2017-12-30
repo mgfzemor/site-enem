@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block imports %}
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<style>
+#load {
+  display: none;
+}
+#ico-search {
+  display: inline-block;
+}
+</style>
+{% endblock %}
+
+{% block title%} Busca Cidade {%endblock%}
+{% block page_name %}Cidades{% endblock %}
+{% block body %}
+<script type=text/javascript>
+  $(function() {
+    $('#calculate').bind('click', function() {
+      $('#load').show();
+      $("#result").text("")
+      $.getJSON($SCRIPT_ROOT + '/pesquisar_cidade', {
+        a: $('input[name="a"]').val(),
+      }, function(data) {
+        $("#load").hide();
+
+        if (data.result[0] == -1){
+          $("#result").html('<br/><h4>Nenhum resultado para: <b>'+$('input[name="a"]').val()+' =| </b></h4>');
+        } else if (data.result[0] == 2){
+          var i;
+          var lista = data.result[1]
+          $("#result").append('<br/><h4>Cidades encontradas: <b>'+lista.length+'</b></h4>');
+          $("#result").append('<ul class="list-group">');
+          for (i=0; i < lista.length; i++){
+            $("#result").append('<li class="list-group-item"> <span class="badge">ESTADO</span><a href="/cidade/'+lista[i][0]+'">'+lista[i][1]+'</a></li>');
+          }
+
+          $("#result").append('</ul>');
+        }
+
+      });
+      return false;
+    });
+  });
+</script>
+<div class="webe">
+  <div class="row">
+    <!-- Coluna de informações do Aluno-->
+    <div class="col-md-6">
+      <h2><img id="ico-search" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/search.png')}}" alt="Busca cidade enem"> Busca Cidade</h2>
+      <div class="input-group" >
+            <input type="text" class="form-control" name=a placeholder="Nome da cidade">
+            <span class="input-group-btn">
+              <button id=calculate class="btn btn-default" type="button">Pesquisar</button>
+            </span>
+          </div><!-- /input-group -->
+
+        <img  id=load width="100" height="50"src="{{url_for('static',filename='img/load.gif')}}"/>
+
+      </div>
+
+      <div class="col-md-6" width="400" height="400">
+        <br/><br/>
+        <h4><b>Faça uma busca rápida pelo nome da cidade!</b> </h4>
+        <p>
+          Informe o nome da sua cidade e nós encontramos para você...
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <span id=result>
+
+        </span>
+        <br/>
+        <h3>
+          <img id="ico-search" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/eye.png')}}" alt="Busca cidade enem">
+           Fique de olho no ensino da sua cidade
+         </h3>
+        <p>
+           Ao analisar os dados de sua cidade você pode fazer um comparativo e
+           e verificar como está o desempenho do seu municipio em relação ao Estado
+           e Média Nacional.
+        </p>
+        </div>
+
+        <div class="col-md-6">
+          <img id="wall" class="img-responsive img-rounded" src="{{url_for('static',filename='img/city.png')}}" alt="" width="500">
+        </div>
+
+      </div>
+  </div>
+
+{% endblock %}

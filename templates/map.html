@@ -1,0 +1,399 @@
+{% extends "layout.html" %}
+{% block title%} Maps {%endblock%}
+{% block imports%}
+<script src={{url_for('static',filename='chart/Chart.js')}}></script>
+<style>
+h2 {
+  display: block-inline;
+  margin-left: 10px;
+}
+#div-sexo {
+  text-align: center;
+}
+</style>
+
+{%endblock%}
+{% block page_name %}
+{{info[0]}}
+{% endblock %}
+
+{% block body %}
+
+<div class="row" id="info">
+    <div class="col-md-6">
+      <iframe width="100%" height="400px" frameborder="0" style="border:0"
+      src="https://www.google.com/maps/embed/v1/place?q=place_id:{{info[1]}}&key=AIzaSyCcsLWXP1VUt4nGWT1mTImutuEtvIsAT7k" allowfullscreen></iframe>
+    </div>
+    <!-- /.col-md-8 -->
+    <div style="" class="col-md-6" height="400px" width="400">
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/team.png')}}">
+        Estudantes (N)
+      </h3>
+      <p><b>{{pam[7]}}</b> inscritos | <b>{{pam[8]}}</b>  presentes  | <b>{{pam[9]}} </b> ausentes <p>
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/calculator.png')}}">
+        Média (µ)
+      </h3>
+      <table class="table">
+     <thead>
+         <tr>
+             <th>Área do Conhecimento</th>
+             <th>Estado</th>
+             <th></th>
+             <th>Nacional</th>
+
+         </tr>
+     </thead>
+     <tbody>
+         <tr>
+             <td>Matemática e suas tecnologias</td>
+             <td>{{pam[1]}}</td>
+             <td>
+               {%if pam[1] > pam[13][0] %}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {% else %}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+             <td>{{pam[13][0]}}</td>
+
+         </tr>
+         <tr>
+             <td>Ciências humanas e suas tecnologias</td>
+             <td>{{pam[2]}}</td>
+             <td>
+               {%if pam[2] > pam[13][1] %}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {% else %}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+             <td>{{pam[13][1]}}</td>
+
+         </tr>
+         <tr>
+             <td>Linguagens, códigos e suas tecnologias</td>
+             <td>{{pam[3]}}</td>
+             <td>
+               {%if pam[3] > pam[13][2] %}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {% else %}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+             <td>{{pam[13][2]}}</td>
+         </tr>
+         <tr>
+             <td>Ciências da natureza e suas tecnologias</td>
+             <td>{{pam[4]}}</td>
+             <td>
+               {%if pam[4] > pam[13][3] %}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {% else %}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+             <td>{{pam[13][3]}}</td>
+         </tr>
+         <tr>
+             <td>Redação</td>
+             <td>{{pam[5]}}</td>
+             <td>
+               {%if pam[5] > pam[13][4] %}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {% else %}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+             <td>{{pam[13][4]}}</td>
+         </tr>
+         <tr>
+             <td>Geral</td>
+             <td>{{pam[6]}}</td>
+             <td>
+               {%if pam[6] > pam[13][5] %}
+                <img src="{{url_for('static',filename='img/aluno/up.png')}}"/>
+                {% else %}
+                <img src="{{url_for('static',filename='img/aluno/down.png')}}"/>
+                {%endif%}
+             </td>
+             <td>{{pam[13][5]}}</td>
+         </tr>
+     </tbody>
+  </table>
+
+    </div>
+
+    <!-- /.col-md-4 -->
+</div>
+<hr/>
+<!-- /.row -->
+<div class="row" id="info">
+  <div class="col-md-6">
+      <h3>
+        <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/money.png')}}">
+        Distribuição de renda
+      </h3>
+          <canvas id="myChart" ></canvas>
+          <script>
+
+          var ctx = document.getElementById("myChart");
+              var data = {
+                  labels: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'],
+                  datasets: [
+                      {
+                          label: "*Renda mensal da família",
+                          backgroundColor: [
+
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+
+                          ],
+                          borderColor: [
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(54, 162, 235, 1)',
+
+                          ],
+                          borderWidth: 1,
+                          data: [{{pam[10]['A']}},{{pam[10]['B']}},{{pam[10]['C']}},{{pam[10]['D']}},{{pam[10]['E']}},{{pam[10]['F']}},{{pam[10]['G']}}
+                        ,{{pam[10]['H']}},{{pam[10]['I']}},{{pam[10]['J']}},{{pam[10]['K']}},{{pam[10]['L']}},{{pam[10]['M']}},{{pam[10]['N']}},{{pam[10]['O']}},{{pam[10]['P']}},{{pam[10]['Q']}}],
+                      }
+                  ]
+              };
+              var myBarChart = new Chart(ctx, {
+                  type: 'bar',
+                  data: data,
+                  options: {
+               responsive: true
+           }
+              });
+
+          </script>
+
+    </div>
+
+  <div style="" class="col-md-6">
+
+    <table class="table">
+   <thead>
+       <tr>
+           <th></th>
+           <th>Renda</th>
+           <th></th>
+           <th>Renda</th>
+       </tr>
+   </thead>
+   <tbody>
+       <tr>
+           <td><b>A</b></td>
+           <td>Nenhuma renda</td>
+           <td><b>I</b></td>
+           <td>de R$ 3.620,01 até R$ 4.344,00</td>
+       </tr>
+       <tr>
+           <td><b>B</b></td>
+           <td>até R$ 724,00</td>
+           <td><b>J</b></td>
+           <td>de R$ 4.344,01 até R$ 5.068,00</td>
+
+       </tr>
+       <tr>
+           <td><b>C</b></td>
+           <td>de R$724,01 a R$ 1.086,00</td>
+           <td><b>K</b></td>
+           <td>de R$ 5.068,01 até R$ 5.792,00</td>
+       </tr>
+       <tr>
+           <td><b>D</b></td>
+           <td>de R$ 1.086,01 até R$ 1.448,00</td>
+           <td><b>L</b></td>
+           <td>de R$ 5.792,01 até R$ 6.516,00</td>
+       </tr>
+       <tr>
+           <td><b>E</b></td>
+           <td>de R$ 1.448,01 até R$ 1.810,00</td>
+           <td><b>M</b></td>
+           <td>de R$ 6.516,01 até R$ 7.240,00</td>
+       </tr>
+       <tr>
+           <td><b>F</b></td>
+           <td>de R$ 1.810,01 até R$ 2.172,00</td>
+           <td><b>N</b></td>
+           <td>de R$ 7.240,01 até R$ 8.688,00</td>
+       </tr>
+       <tr>
+           <td><b>G</b></td>
+           <td>de R$ 2.172,01 até R$ 2.896,00</td>
+           <td><b>P</b></td>
+           <td>de R$ 10.860,01 até R$ 14.480,00</td>
+       </tr>
+       <tr>
+           <td><b>H</b></td>
+           <td>de R$ 2.896,01 até R$ 3.620,00</td>
+           <td><b>Q</b></td>
+           <td>mais de R$ 14.480,01</td>
+       </tr>
+   </tbody>
+</table>
+
+</div>
+
+</div>
+<hr/>
+<div class="row">
+<div style="" class="col-md-6">
+  <h3>
+    <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/bleed.png')}}">
+    Distribuição de raça
+  </h3>
+      <canvas id="chart_raca" ></canvas>
+      <script>
+
+      var ctx = document.getElementById("chart_raca");
+          var data = {
+              labels: ['NI','Branca','Preta','Parda','Amarela','Indigena'],
+              datasets: [
+                  {
+                      label: "Raça",
+                      backgroundColor: [
+
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(54, 162, 235, 1)',
+
+                      ],
+                      borderColor: [
+                          'rgba(54, 162, 235, 1)',
+
+
+                      ],
+                      borderWidth: 1,
+                      data: [{{pam[12]['0']}},{{pam[12]['1']}},{{pam[12]['2']}},{{pam[12]['3']}},{{pam[12]['4']}},{{pam[12]['5']}}],
+                  }
+              ]
+          };
+          var myBarChart = new Chart(ctx, {
+              type: 'bar',
+              data: data,
+              options: {
+           responsive: true
+       }
+          });
+
+      </script>
+
+  </div>
+
+  <div id="" class="col-md-2">
+<br/><br/><br/>
+
+    <table class="table">
+   <thead>
+       <tr>
+           <th>Raça</th>
+           <th>%</th>
+       </tr>
+   </thead>
+   <tbody>
+       <tr>
+           <td><b>NI</b></td>
+           <td>{{pam[12]['0']}}</td>
+
+       </tr>
+       <tr>
+           <td><b>Branca</b></td>
+           <td>{{pam[12]['1']}}</td>
+
+       </tr>
+       <tr>
+           <td><b>Preta</b></td>
+           <td>{{pam[12]['2']}}</td>
+       </tr>
+       <tr>
+           <td><b>Parda</b></td>
+           <td>{{pam[12]['3']}}</td>
+
+       </tr>
+       <tr>
+           <td><b>Amarela</b></td>
+           <td>{{pam[12]['4']}}</td>
+
+       </tr>
+       <tr>
+           <td><b>Indigena</b></td>
+           <td>{{pam[12]['5']}}</td>
+
+       </tr>
+
+   </tbody>
+</table>
+
+  </div>
+  <div id="div-sexo" class="col-md-4">
+    <h3>
+      <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/icons/pie.png')}}">
+      Sexo:
+      <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/aluno/M.png')}}"> {{pam[11]['M']}} %
+      <img id="icon" class="img-responsive img-rounded" src="{{url_for('static',filename='img/aluno/F.png')}}"> {{pam[11]['F']}} %
+    </h3>
+    <br/>
+      <canvas id="canvas_n" ></canvas>
+
+  </div>
+
+</div>
+
+<script>
+
+var data = {
+labels: [
+    "Fem",
+    "Masc",
+],
+datasets: [
+    {
+        data: [{{pam[11]['F']}}, {{pam[11]['M']}}],
+        backgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+        ],
+        hoverBackgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+        ]
+    }]
+};
+
+    window.onload = function() {
+        var ctx_n = document.getElementById("canvas_n").getContext("2d");
+
+        var myPieChart = new Chart(ctx_n,{
+          type: 'pie',
+          data: data,
+
+          });
+    };
+    </script>
+
+{% endblock %}
