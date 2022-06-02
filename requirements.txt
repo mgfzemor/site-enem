@@ -25,7 +25,7 @@ gevent==1.2a1
 greenlet==0.4.10
 gunicorn==19.6.0
 gyp==0.1
-html5lib==0.999
+html5lib==0.99999999
 httplib2==0.8
 itsdangerous==0.24
 lockfile==0.8
